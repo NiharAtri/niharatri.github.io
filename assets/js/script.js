@@ -25,43 +25,35 @@ themeToggle.addEventListener('click', function() {
   }, 200);
 });
 
-// Element toggle function
-const elementToggleFunc = function (elem) { 
-  elem.classList.toggle("active"); 
-}
+// Page navigation
+const navigationLinks = document.querySelectorAll("[data-nav-link]");
+const pages = document.querySelectorAll("[data-page]");
 
-// Sidebar variables
-const sidebar = document.querySelector("[data-sidebar]");
-const sidebarBtn = document.querySelector("[data-sidebar-btn]");
-
-// Sidebar toggle functionality for mobile
-sidebarBtn.addEventListener("click", function () { 
-  elementToggleFunc(sidebar); 
-});
-
-// Custom select variables
-const select = document.querySelector("[data-select]");
-const selectItems = document.querySelectorAll("[data-select-item]");
-const selectValue = document.querySelector("[data-selecct-value]");
-const filterBtn = document.querySelectorAll("[data-filter-btn]");
-
-select.addEventListener("click", function () { 
-  elementToggleFunc(this); 
-});
-
-// Add event in all select items
-for (let i = 0; i < selectItems.length; i++) {
-  selectItems[i].addEventListener("click", function () {
-    let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
-    elementToggleFunc(select);
-    filterFunc(selectedValue);
+// Add event to all nav links
+for (let i = 0; i < navigationLinks.length; i++) {
+  navigationLinks[i].addEventListener("click", function () {
+    // Remove active class from all pages and nav links
+    pages.forEach(page => page.classList.remove("active"));
+    navigationLinks.forEach(link => link.classList.remove("active"));
+    
+    // Add active class to clicked nav link and corresponding page
+    const targetPage = this.innerHTML.toLowerCase();
+    for (let j = 0; j < pages.length; j++) {
+      if (pages[j].dataset.page === targetPage) {
+        pages[j].classList.add("active");
+        this.classList.add("active");
+        window.scrollTo(0, 0);
+        break;
+      }
+    }
   });
 }
 
-// Filter variables
+// Portfolio filter functionality
+const filterBtn = document.querySelectorAll("[data-filter-btn]");
 const filterItems = document.querySelectorAll("[data-filter-item]");
 
+// Filter function
 const filterFunc = function (selectedValue) {
   for (let i = 0; i < filterItems.length; i++) {
     if (selectedValue === "all") {
@@ -74,13 +66,12 @@ const filterFunc = function (selectedValue) {
   }
 }
 
-// Add event in all filter button items for large screen
+// Add event to all filter buttons
 let lastClickedBtn = filterBtn[0];
 
 for (let i = 0; i < filterBtn.length; i++) {
   filterBtn[i].addEventListener("click", function () {
     let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
     filterFunc(selectedValue);
 
     lastClickedBtn.classList.remove("active");
@@ -89,44 +80,49 @@ for (let i = 0; i < filterBtn.length; i++) {
   });
 }
 
-// Contact form variables
+// Contact form functionality
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
 
-// Add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
-    // Check form validation
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
-    }
-  });
-}
-
-// Page navigation variables
-const navigationLinks = document.querySelectorAll("[data-nav-link]");
-const pages = document.querySelectorAll("[data-page]");
-
-// Add event to all nav link
-for (let i = 0; i < navigationLinks.length; i++) {
-  navigationLinks[i].addEventListener("click", function () {
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
-        window.scrollTo(0, 0);
+// Add event to all form input fields
+if (form) {
+  for (let i = 0; i < formInputs.length; i++) {
+    formInputs[i].addEventListener("input", function () {
+      // Check form validation
+      if (form.checkValidity()) {
+        formBtn.removeAttribute("disabled");
       } else {
-        pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
+        formBtn.setAttribute("disabled", "");
       }
-    }
+    });
+  }
+
+  // Form submission
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Add loading state to button
+    formBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon><span>Sending...</span>';
+    formBtn.disabled = true;
+    
+    // Simulate form submission
+    setTimeout(() => {
+      formBtn.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon><span>Message Sent!</span>';
+      formBtn.style.background = '#4caf50';
+      
+      // Reset form after 2 seconds
+      setTimeout(() => {
+        form.reset();
+        formBtn.innerHTML = '<ion-icon name="paper-plane"></ion-icon><span>Send Message</span>';
+        formBtn.style.background = '';
+        formBtn.disabled = true;
+      }, 2000);
+    }, 1500);
   });
 }
 
-// Add smooth animations on scroll
+// Animate elements on scroll
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px'
@@ -143,6 +139,15 @@ const observer = new IntersectionObserver(function(entries) {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', function() {
+  // Animate timeline items
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  timelineItems.forEach((item, index) => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(20px)';
+    item.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(item);
+  });
+  
   // Animate skill bars when they come into view
   const skillsSection = document.querySelector('.skills-list');
   if (skillsSection) {
@@ -150,12 +155,12 @@ document.addEventListener('DOMContentLoaded', function() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const skillBars = entry.target.querySelectorAll('.skill-progress-fill');
-          skillBars.forEach(bar => {
+          skillBars.forEach((bar, index) => {
             const width = bar.style.width;
             bar.style.width = '0';
             setTimeout(() => {
               bar.style.width = width;
-            }, 200);
+            }, 200 + (index * 100));
           });
           skillObserver.unobserve(entry.target);
         }
@@ -164,55 +169,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     skillObserver.observe(skillsSection);
   }
-});
-
-// Add parallax effect to header
-window.addEventListener('scroll', function() {
-  const scrolled = window.pageYOffset;
-  const parallaxElements = document.querySelectorAll('.article-title');
   
-  parallaxElements.forEach(element => {
-    const speed = 0.5;
-    element.style.transform = `translateY(${scrolled * speed}px)`;
+  // Animate project items
+  const projectItems = document.querySelectorAll('.project-item');
+  projectItems.forEach((item, index) => {
+    if (item.classList.contains('active')) {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        item.style.opacity = '1';
+        item.style.transform = 'translateY(0)';
+      }, index * 100);
+    }
   });
 });
 
-// Add hover sound effect (optional - requires audio file)
-const addHoverEffect = () => {
-  const hoverElements = document.querySelectorAll('button, .social-link, .contact-link');
-  hoverElements.forEach(element => {
-    element.addEventListener('mouseenter', function() {
-      this.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-    });
-  });
-};
-
-addHoverEffect();
-
-// Enhanced form submission (prevent default and show success message)
-if (form) {
-  form.addEventListener('submit', function(e) {
+// Smooth scroll for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
     e.preventDefault();
-    
-    // Add loading state to button
-    formBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon><span>Sending...</span>';
-    formBtn.disabled = true;
-    
-    // Simulate form submission (replace with actual submission logic)
-    setTimeout(() => {
-      formBtn.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon><span>Message Sent!</span>';
-      formBtn.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
-      
-      // Reset form after 2 seconds
-      setTimeout(() => {
-        form.reset();
-        formBtn.innerHTML = '<ion-icon name="paper-plane"></ion-icon><span>Send Message</span>';
-        formBtn.style.background = '';
-        formBtn.disabled = true;
-      }, 2000);
-    }, 1500);
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   });
-}
+});
 
 // Add keyboard navigation support
 document.addEventListener('keydown', function(e) {
@@ -233,7 +218,16 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// Performance optimization: Lazy load images
+// Mobile menu toggle (for future mobile menu implementation)
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', function() {
+    const navList = document.querySelector('.navbar-list');
+    navList.classList.toggle('active');
+  });
+}
+
+// Lazy load images
 const images = document.querySelectorAll('img[loading="lazy"]');
 const imageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
@@ -247,5 +241,17 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
 });
 
 images.forEach(img => imageObserver.observe(img));
+
+// Add hover effect to social links
+const socialLinks = document.querySelectorAll('.social-link');
+socialLinks.forEach(link => {
+  link.addEventListener('mouseenter', function() {
+    this.style.transform = 'translateY(-2px) scale(1.1)';
+  });
+  
+  link.addEventListener('mouseleave', function() {
+    this.style.transform = 'translateY(0) scale(1)';
+  });
+});
 
 console.log('Portfolio initialized successfully! Theme:', currentTheme);
