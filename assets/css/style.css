@@ -1668,23 +1668,8 @@ textarea.form-input::-webkit-resizer { display: none; }
 }
 
 @media (min-width: 1250px) {
-  body::-webkit-scrollbar { width: 20px; }
-
-  body::-webkit-scrollbar-track { background: var(--primary-bg); }
-
-  body::-webkit-scrollbar-thumb {
-    border: 5px solid var(--primary-bg);
-    background: var(--accent-color);
-    border-radius: 20px;
-    opacity: 0.3;
-  }
-
-  body::-webkit-scrollbar-thumb:hover { 
-    opacity: 0.5;
-  }
-
-  body::-webkit-scrollbar-button { height: 60px; }
-
+  /* Use default scrollbar styling */
+  
   .sidebar, article { width: auto; }
 
   article { min-height: 100%; }
