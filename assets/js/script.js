@@ -1,87 +1,101 @@
 'use strict';
 
+// Theme Toggle Functionality
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
 
+// Check for saved theme preference or default to dark mode
+const currentTheme = localStorage.getItem('theme') || 'dark';
+if (currentTheme === 'light') {
+  body.classList.add('light-mode');
+}
 
-// element toggle function
-const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
+// Theme toggle event listener
+themeToggle.addEventListener('click', function() {
+  body.classList.toggle('light-mode');
+  
+  // Save theme preference
+  const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
+  localStorage.setItem('theme', theme);
+  
+  // Add animation effect
+  this.style.transform = 'scale(0.95)';
+  setTimeout(() => {
+    this.style.transform = 'scale(1)';
+  }, 200);
+});
 
+// Element toggle function
+const elementToggleFunc = function (elem) { 
+  elem.classList.toggle("active"); 
+}
 
-
-// sidebar variables
+// Sidebar variables
 const sidebar = document.querySelector("[data-sidebar]");
 const sidebarBtn = document.querySelector("[data-sidebar-btn]");
 
-// sidebar toggle functionality for mobile
-sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
+// Sidebar toggle functionality for mobile
+sidebarBtn.addEventListener("click", function () { 
+  elementToggleFunc(sidebar); 
+});
 
-
-
-// testimonials variables
+// Testimonials variables
 const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
 const modalContainer = document.querySelector("[data-modal-container]");
 const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
 const overlay = document.querySelector("[data-overlay]");
 
-// modal variable
+// Modal variable
 const modalImg = document.querySelector("[data-modal-img]");
 const modalTitle = document.querySelector("[data-modal-title]");
 const modalText = document.querySelector("[data-modal-text]");
 
-// modal toggle function
+// Modal toggle function
 const testimonialsModalFunc = function () {
   modalContainer.classList.toggle("active");
   overlay.classList.toggle("active");
 }
 
-// add click event to all modal items
+// Add click event to all modal items
 for (let i = 0; i < testimonialsItem.length; i++) {
-
   testimonialsItem[i].addEventListener("click", function () {
-
     modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
     modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
     modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
     modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
-
     testimonialsModalFunc();
-
   });
-
 }
 
-// add click event to modal close button
+// Add click event to modal close button
 modalCloseBtn.addEventListener("click", testimonialsModalFunc);
 overlay.addEventListener("click", testimonialsModalFunc);
 
-
-
-// custom select variables
+// Custom select variables
 const select = document.querySelector("[data-select]");
 const selectItems = document.querySelectorAll("[data-select-item]");
 const selectValue = document.querySelector("[data-selecct-value]");
 const filterBtn = document.querySelectorAll("[data-filter-btn]");
 
-select.addEventListener("click", function () { elementToggleFunc(this); });
+select.addEventListener("click", function () { 
+  elementToggleFunc(this); 
+});
 
-// add event in all select items
+// Add event in all select items
 for (let i = 0; i < selectItems.length; i++) {
   selectItems[i].addEventListener("click", function () {
-
     let selectedValue = this.innerText.toLowerCase();
     selectValue.innerText = this.innerText;
     elementToggleFunc(select);
     filterFunc(selectedValue);
-
   });
 }
 
-// filter variables
+// Filter variables
 const filterItems = document.querySelectorAll("[data-filter-item]");
 
 const filterFunc = function (selectedValue) {
-
   for (let i = 0; i < filterItems.length; i++) {
-
     if (selectedValue === "all") {
       filterItems[i].classList.add("active");
     } else if (selectedValue === filterItems[i].dataset.category) {
@@ -89,18 +103,14 @@ const filterFunc = function (selectedValue) {
     } else {
       filterItems[i].classList.remove("active");
     }
-
   }
-
 }
 
-// add event in all filter button items for large screen
+// Add event in all filter button items for large screen
 let lastClickedBtn = filterBtn[0];
 
 for (let i = 0; i < filterBtn.length; i++) {
-
   filterBtn[i].addEventListener("click", function () {
-
     let selectedValue = this.innerText.toLowerCase();
     selectValue.innerText = this.innerText;
     filterFunc(selectedValue);
@@ -108,42 +118,33 @@ for (let i = 0; i < filterBtn.length; i++) {
     lastClickedBtn.classList.remove("active");
     this.classList.add("active");
     lastClickedBtn = this;
-
   });
-
 }
 
-
-
-// contact form variables
+// Contact form variables
 const form = document.querySelector("[data-form]");
 const formInputs = document.querySelectorAll("[data-form-input]");
 const formBtn = document.querySelector("[data-form-btn]");
 
-// add event to all form input field
+// Add event to all form input field
 for (let i = 0; i < formInputs.length; i++) {
   formInputs[i].addEventListener("input", function () {
-
-    // check form validation
+    // Check form validation
     if (form.checkValidity()) {
       formBtn.removeAttribute("disabled");
     } else {
       formBtn.setAttribute("disabled", "");
     }
-
   });
 }
 
-
-
-// page navigation variables
+// Page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
-// add event to all nav link
+// Add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-
     for (let i = 0; i < pages.length; i++) {
       if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
         pages[i].classList.add("active");
@@ -154,25 +155,137 @@ for (let i = 0; i < navigationLinks.length; i++) {
         navigationLinks[i].classList.remove("active");
       }
     }
-
   });
 }
 
-// Theme toggle functionality
-const themeToggleBtn = document.getElementById('theme-toggle');
-if (themeToggleBtn) {
-  // Apply saved theme on load
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
+// Add smooth animations on scroll
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+// Observe service items for animation
+document.addEventListener('DOMContentLoaded', function() {
+  const serviceItems = document.querySelectorAll('.service-item');
+  serviceItems.forEach(item => {
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(20px)';
+    item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(item);
+  });
+  
+  // Animate skill bars when they come into view
+  const skillsSection = document.querySelector('.skills-list');
+  if (skillsSection) {
+    const skillObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const skillBars = entry.target.querySelectorAll('.skill-progress-fill');
+          skillBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0';
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 200);
+          });
+          skillObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    skillObserver.observe(skillsSection);
   }
+});
 
-  // Toggle handler
-  themeToggleBtn.addEventListener('click', function () {
-    document.body.classList.toggle('light-mode');
+// Add parallax effect to header
+window.addEventListener('scroll', function() {
+  const scrolled = window.pageYOffset;
+  const parallaxElements = document.querySelectorAll('.article-title');
+  
+  parallaxElements.forEach(element => {
+    const speed = 0.5;
+    element.style.transform = `translateY(${scrolled * speed}px)`;
+  });
+});
 
-    // Persist choice
-    const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-    localStorage.setItem('theme', currentTheme);
+// Add hover sound effect (optional - requires audio file)
+const addHoverEffect = () => {
+  const hoverElements = document.querySelectorAll('button, .social-link, .contact-link');
+  hoverElements.forEach(element => {
+    element.addEventListener('mouseenter', function() {
+      this.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+    });
+  });
+};
+
+addHoverEffect();
+
+// Enhanced form submission (prevent default and show success message)
+if (form) {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Add loading state to button
+    formBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon><span>Sending...</span>';
+    formBtn.disabled = true;
+    
+    // Simulate form submission (replace with actual submission logic)
+    setTimeout(() => {
+      formBtn.innerHTML = '<ion-icon name="checkmark-circle-outline"></ion-icon><span>Message Sent!</span>';
+      formBtn.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+      
+      // Reset form after 2 seconds
+      setTimeout(() => {
+        form.reset();
+        formBtn.innerHTML = '<ion-icon name="paper-plane"></ion-icon><span>Send Message</span>';
+        formBtn.style.background = '';
+        formBtn.disabled = true;
+      }, 2000);
+    }, 1500);
   });
 }
+
+// Add keyboard navigation support
+document.addEventListener('keydown', function(e) {
+  // Toggle theme with keyboard shortcut (Ctrl/Cmd + Shift + L)
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'L') {
+    themeToggle.click();
+  }
+  
+  // Navigate between tabs with arrow keys
+  const activeNavIndex = Array.from(navigationLinks).findIndex(link => 
+    link.classList.contains('active')
+  );
+  
+  if (e.key === 'ArrowRight' && activeNavIndex < navigationLinks.length - 1) {
+    navigationLinks[activeNavIndex + 1].click();
+  } else if (e.key === 'ArrowLeft' && activeNavIndex > 0) {
+    navigationLinks[activeNavIndex - 1].click();
+  }
+});
+
+// Performance optimization: Lazy load images
+const images = document.querySelectorAll('img[loading="lazy"]');
+const imageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src || img.src;
+      img.classList.add('loaded');
+      observer.unobserve(img);
+    }
+  });
+});
+
+images.forEach(img => imageObserver.observe(img));
+
+console.log('Portfolio initialized successfully! Theme:', currentTheme);
