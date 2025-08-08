@@ -158,22 +158,21 @@ for (let i = 0; i < navigationLinks.length; i++) {
   });
 }
 
-// theme toggle variables
-const themeToggleBtn = document.querySelector("[data-theme-toggle]");
+// Theme toggle functionality
+const themeToggleBtn = document.getElementById('theme-toggle');
+if (themeToggleBtn) {
+  // Apply saved theme on load
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  }
 
-// theme toggle functionality
-themeToggleBtn.addEventListener("click", function () {
-  const currentTheme = document.documentElement.getAttribute("data-theme");
-  const newTheme = currentTheme === "light" ? "dark" : "light";
-  
-  document.documentElement.setAttribute("data-theme", newTheme);
-  
-  // save theme preference to localStorage
-  localStorage.setItem("theme", newTheme);
-});
+  // Toggle handler
+  themeToggleBtn.addEventListener('click', function () {
+    document.body.classList.toggle('light-mode');
 
-// load saved theme on page load
-document.addEventListener("DOMContentLoaded", function () {
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  document.documentElement.setAttribute("data-theme", savedTheme);
-});
+    // Persist choice
+    const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+    localStorage.setItem('theme', currentTheme);
+  });
+}
