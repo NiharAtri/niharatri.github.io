@@ -157,3 +157,23 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
   });
 }
+
+// theme toggle variables
+const themeToggleBtn = document.querySelector("[data-theme-toggle]");
+
+// theme toggle functionality
+themeToggleBtn.addEventListener("click", function () {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  const newTheme = currentTheme === "light" ? "dark" : "light";
+  
+  document.documentElement.setAttribute("data-theme", newTheme);
+  
+  // save theme preference to localStorage
+  localStorage.setItem("theme", newTheme);
+});
+
+// load saved theme on page load
+document.addEventListener("DOMContentLoaded", function () {
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+});
