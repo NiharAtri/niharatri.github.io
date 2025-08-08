@@ -50,8 +50,8 @@
   );
   --text-gradient-yellow: linear-gradient(
     to right, 
-    hsl(45, 100%, 72%), 
-    hsl(35, 100%, 68%)
+    hsl(200, 100%, 70%), 
+    hsl(190, 100%, 65%)
   );
 
   /* solid */
@@ -63,22 +63,11 @@
   --smoky-black: hsl(0, 0%, 7%);
   --white-1: hsl(0, 0%, 100%);
   --white-2: hsl(0, 0%, 98%);
-  --orange-yellow-crayola: hsl(45, 100%, 72%);
-  --vegas-gold: hsl(45, 54%, 58%);
+  --orange-yellow-crayola: hsl(200, 100%, 70%);
+  --vegas-gold: hsl(198, 100%, 60%);
   --light-gray: hsl(0, 0%, 84%);
   --light-gray-70: hsla(0, 0%, 84%, 0.7);
   --bittersweet-shimmer: hsl(0, 43%, 51%);
-
-  /* Theme Colors - Dark Mode (default) */
-  --primary-bg: var(--smoky-black);
-  --secondary-bg: var(--eerie-black-2);
-  --border-color: var(--jet);
-  --text-primary: var(--white-2);
-  --text-secondary: var(--light-gray);
-  --accent-color: hsl(195, 100%, 70%); /* Light blue for dark mode */
-  --accent-gradient: linear-gradient(to right, hsl(195, 100%, 70%), hsl(195, 100%, 60%));
-  --accent-bg-1: linear-gradient(to bottom right, hsl(195, 100%, 70%) 0%, hsla(195, 100%, 60%, 0) 50%);
-  --accent-bg-2: linear-gradient(135deg, hsla(195, 100%, 70%, 0.251) 0%, hsla(195, 100%, 60%, 0) 59.86%), hsl(240, 2%, 13%);
 
   /**
    * typography
@@ -122,46 +111,100 @@
 
 }
 
-/* Light Mode Theme */
-[data-theme="light"] {
-  --primary-bg: hsl(0, 0%, 100%);
-  --secondary-bg: hsl(0, 0%, 98%);
-  --border-color: hsl(0, 0%, 90%);
-  --text-primary: hsl(0, 0%, 15%);
-  --text-secondary: hsl(0, 0%, 40%);
-  --accent-color: hsl(320, 100%, 70%); /* Pink for light mode */
-  --accent-gradient: linear-gradient(to right, hsl(320, 100%, 70%), hsl(320, 100%, 60%));
-  --accent-bg-1: linear-gradient(to bottom right, hsl(320, 100%, 70%) 0%, hsla(320, 100%, 60%, 0) 50%);
-  --accent-bg-2: linear-gradient(135deg, hsla(320, 100%, 70%, 0.251) 0%, hsla(320, 100%, 60%, 0) 59.86%), hsl(0, 0%, 98%);
-  
-  /* Override specific colors for light mode */
-  --bg-gradient-onyx: linear-gradient(
-    to bottom right, 
-    hsl(0, 0%, 95%) 3%, 
-    hsl(0, 0%, 98%) 97%
-  );
-  --bg-gradient-jet: linear-gradient(
-    to bottom right, 
-    hsla(0, 0%, 92%, 0.251) 0%, 
-    hsla(0, 0%, 95%, 0) 100%
-  ), hsl(0, 0%, 98%);
-  --border-gradient-onyx: linear-gradient(
-    to bottom right, 
-    hsl(0, 0%, 85%) 0%, 
-    hsla(0, 0%, 85%, 0) 50%
-  );
-  --jet: hsl(0, 0%, 90%);
-  --onyx: hsl(0, 0%, 95%);
-  --eerie-black-1: hsl(0, 0%, 98%);
-  --eerie-black-2: hsl(0, 0%, 96%);
-  --smoky-black: hsl(0, 0%, 100%);
-  --light-gray: hsl(0, 0%, 40%);
-  --light-gray-70: hsla(0, 0%, 40%, 0.7);
+
+
+
+
+/*-----------------------------------*\
+  #THEME TOGGLE
+\*-----------------------------------*/
+
+/* Toggle switch styles */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  height: 30px;
+  background: var(--onyx);
+  border-radius: 15px;
+  border: 2px solid var(--jet);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: all 0.3s ease;
+  z-index: 999;
 }
 
+.theme-toggle::before {
+  content: '';
+  width: 22px;
+  height: 22px;
+  background: var(--orange-yellow-crayola);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  transform: translateX(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
+/* Light mode - slide to right */
+.light-mode .theme-toggle::before {
+  transform: translateX(30px);
+}
 
+.theme-toggle ion-icon {
+  position: absolute;
+  font-size: 14px;
+  color: var(--light-gray);
+  transition: all 0.3s ease;
+}
 
+/* Moon icon on the left */
+.theme-toggle .moon-icon {
+  left: 8px;
+}
+
+/* Sun icon on the right */
+.theme-toggle .sun-icon {
+  right: 8px;
+  opacity: 0;
+}
+
+/* Light mode - show sun icon, hide moon */
+.light-mode .theme-toggle .moon-icon {
+  opacity: 0;
+}
+
+.light-mode .theme-toggle .sun-icon {
+  opacity: 1;
+}
+
+/* Light mode variable overrides */
+.light-mode {
+  --smoky-black: hsl(0, 0%, 100%);
+  --eerie-black-1: hsl(0, 0%, 96%);
+  --eerie-black-2: hsl(0, 0%, 94%);
+  --onyx: hsl(0, 0%, 90%);
+  --jet: hsl(0, 0%, 85%);
+
+  /* Text colours */
+  --white-1: hsl(240, 4%, 10%);
+  --white-2: hsl(240, 4%, 15%);
+  --light-gray: hsl(240, 4%, 35%);
+  --light-gray-70: hsla(240, 4%, 35%, 0.7);
+
+  /* Accent colour becomes pink */
+  --orange-yellow-crayola: hsl(340, 100%, 70%);
+  --vegas-gold: hsl(340, 85%, 60%);
+  --text-gradient-yellow: linear-gradient(to right, hsl(340, 100%, 70%), hsl(330, 100%, 65%));
+}
+
+/* Light mode navbar background for readability */
+.light-mode .navbar {
+  background: hsla(0, 0%, 90%, 0.75);
+  border-color: var(--jet);
+}
 
 /*-----------------------------------*\
   #RESET
@@ -195,15 +238,15 @@ input, textarea {
 }
 
 ::selection {
-  background: var(--accent-color);
-  color: var(--secondary-bg);
+  background: var(--orange-yellow-crayola);
+  color: var(--smoky-black);
 }
 
-:focus { outline-color: var(--accent-color); }
+:focus { outline-color: var(--orange-yellow-crayola); }
 
 html { font-family: var(--ff-poppins); }
 
-body { background: var(--primary-bg); }
+body { background: var(--smoky-black); }
 
 
 
@@ -215,8 +258,8 @@ body { background: var(--primary-bg); }
 
 .sidebar,
 article {
-  background: var(--secondary-bg);
-  border: 1px solid var(--border-color);
+  background: var(--eerie-black-2);
+  border: 1px solid var(--jet);
   border-radius: 20px;
   padding: 15px;
   box-shadow: var(--shadow-1);
@@ -240,7 +283,7 @@ article {
   justify-content: center;
   align-items: center;
   font-size: 16px;
-  color: var(--accent-color);
+  color: var(--orange-yellow-crayola);
   box-shadow: var(--shadow-1);
   z-index: 1;
 }
@@ -272,7 +315,7 @@ article.active {
 .h3,
 .h4,
 .h5 {
-  color: var(--text-primary);
+  color: var(--white-2);
   text-transform: capitalize;
 }
 
@@ -299,7 +342,7 @@ article.active {
   left: 0;
   width: 30px;
   height: 3px;
-  background: var(--accent-gradient);
+  background: var(--text-gradient-yellow);
   border-radius: 3px;
 }
 
@@ -314,7 +357,7 @@ article.active {
 }
 
 .has-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--accent-color);
+  background: var(--orange-yellow-crayola);
   border-radius: 5px;
 }
 
@@ -385,7 +428,7 @@ main {
 }
 
 .info-content .name {
-  color: var(--text-primary);
+  color: var(--white-2);
   font-size: var(--fs-3);
   font-weight: var(--fw-500);
   letter-spacing: -0.25px;
@@ -408,7 +451,7 @@ main {
   right: -15px;
   border-radius: 0 15px;
   font-size: 13px;
-  color: var(--accent-color);
+  color: var(--orange-yellow-crayola);
   background: var(--border-gradient-onyx);
   padding: 10px;
   box-shadow: var(--shadow-2);
@@ -427,10 +470,10 @@ main {
 }
 
 .info_more-btn:hover,
-.info_more-btn:focus { background: var(--accent-bg-1); }
+.info_more-btn:focus { background: var(--bg-gradient-yellow-1); }
 
 .info_more-btn:hover::before,
-.info_more-btn:focus::before { background: var(--accent-bg-2); }
+.info_more-btn:focus::before { background: var(--bg-gradient-yellow-2); }
 
 .info_more-btn span { display: none; }
 
@@ -471,7 +514,7 @@ main {
 }
 
 .contact-info :is(.contact-link, time, address) {
-  color: var(--text-primary);
+  color: var(--white-2);
   font-size: var(--fs-7);
 }
 
@@ -533,54 +576,7 @@ main {
 .navbar-link:hover,
 .navbar-link:focus { color: var(--light-gray-70); }
 
-.navbar-link.active { color: var(--accent-color); }
-
-
-/*-----------------------------------*\
-  #THEME TOGGLE
-\*-----------------------------------*/
-
-.theme-toggle-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: var(--secondary-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: var(--accent-color);
-  box-shadow: var(--shadow-2);
-  transition: var(--transition-1);
-  z-index: 10;
-  cursor: pointer;
-}
-
-.theme-toggle-btn:hover {
-  background: var(--accent-color);
-  color: var(--secondary-bg);
-  transform: scale(1.1);
-}
-
-.theme-toggle-btn .sun-icon {
-  display: none;
-}
-
-.theme-toggle-btn .moon-icon {
-  display: block;
-}
-
-[data-theme="light"] .theme-toggle-btn .sun-icon {
-  display: block;
-}
-
-[data-theme="light"] .theme-toggle-btn .moon-icon {
-  display: none;
-}
+.navbar-link.active { color: var(--orange-yellow-crayola); }
 
 
 
@@ -593,7 +589,7 @@ main {
 .about .article-title { margin-bottom: 15px; }
 
 .about-text {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-size: var(--fs-6);
   font-weight: var(--fw-300);
   line-height: 1.6;
@@ -644,7 +640,7 @@ main {
 .service-item-title { margin-bottom: 7px; }
 
 .service-item-text {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-size: var(--fs-6);
   font-weight: var(--fw-3);
   line-height: 1.6;
@@ -691,7 +687,7 @@ main {
 .testimonials-item-title { margin-bottom: 7px; }
 
 .testimonials-text {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-size: var(--fs-6);
   font-weight: var(--fw-300);
   line-height: 1.6;
@@ -913,13 +909,13 @@ main {
   left: -33px;
   height: 6px;
   width: 6px;
-  background: var(--accent-gradient);
+  background: var(--text-gradient-yellow);
   border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--border-color);
+  box-shadow: 0 0 0 4px var(--jet);
 }
 
 .timeline-text {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-weight: var(--fw-300);
   line-height: 1.6;
 }
@@ -944,20 +940,20 @@ main {
 }
 
 .skill .title-wrapper data {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-size: var(--fs-7);
   font-weight: var(--fw-300);
 }
 
 .skill-progress-bg {
-  background: var(--border-color);
+  background: var(--jet);
   width: 100%;
   height: 8px;
   border-radius: 10px;
 }
 
 .skill-progress-fill {
-  background: var(--accent-gradient);
+  background: var(--text-gradient-yellow);
   height: 100%;
   border-radius: inherit;
 }
@@ -1075,7 +1071,7 @@ main {
   --scale: 0.8;
 
   background: var(--jet);
-  color: var(--accent-color);
+  color: var(--orange-yellow-crayola);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1108,7 +1104,7 @@ main {
 .project-category { margin-left: 10px; }
 
 .project-title {
-  color: var(--text-primary);
+  color: var(--white-2);
   font-size: var(--fs-5);
   font-weight: var(--fw-400);
   text-transform: capitalize;
@@ -1200,10 +1196,10 @@ main {
   transition: var(--transition-1);
 }
 
-.blog-post-item > a:hover .blog-item-title { color: var(--accent-color); }
+.blog-post-item > a:hover .blog-item-title { color: var(--orange-yellow-crayola); }
 
 .blog-text {
-  color: var(--text-secondary);
+  color: var(--light-gray);
   font-size: var(--fs-6);
   font-weight: var(--fw-300);
   line-height: 1.6;
@@ -1248,18 +1244,18 @@ main {
 }
 
 .form-input {
-  color: var(--text-primary);
+  color: var(--white-2);
   font-size: var(--fs-6);
   font-weight: var(--fw-400);
   padding: 13px 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--jet);
   border-radius: 14px;
   outline: none;
 }
 
 .form-input::placeholder { font-weight: var(--fw-500); }
 
-.form-input:focus { border-color: var(--accent-color); }
+.form-input:focus { border-color: var(--orange-yellow-crayola); }
 
 textarea.form-input {
   min-height: 100px;
@@ -1277,7 +1273,7 @@ textarea.form-input::-webkit-resizer { display: none; }
   position: relative;
   width: 100%;
   background: var(--border-gradient-onyx);
-  color: var(--accent-color);
+  color: var(--orange-yellow-crayola);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1303,9 +1299,9 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 .form-btn ion-icon { font-size: 16px; }
 
-.form-btn:hover { background: var(--accent-bg-1); }
+.form-btn:hover { background: var(--bg-gradient-yellow-1); }
 
-.form-btn:hover::before { background: var(--accent-bg-2); }
+.form-btn:hover::before { background: var(--bg-gradient-yellow-2); }
 
 .form-btn:disabled {
   opacity: 0.7;
@@ -1715,7 +1711,7 @@ textarea.form-input::-webkit-resizer { display: none; }
 
   .filter-item button:hover { color: var(--light-gray-70); }
 
-  .filter-item button.active { color: var(--accent-color); }
+  .filter-item button.active { color: var(--orange-yellow-crayola); }
 
   /* portfolio and blog grid */
 
